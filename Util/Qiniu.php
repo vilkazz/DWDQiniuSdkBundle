@@ -120,9 +120,9 @@ class Qiniu
      *
      * read: https://github.com/qiniu/php-sdk/tree/develop/docs#11%E4%B8%8A%E4%BC%A0%E6%B5%81%E7%A8%8B
      */
-    public function put( $content )
+    public function put( $content, $key = '' )
     {
-        $key = md5($content);
+        $key = empty($key) ? md5($content) : $key;
 
         $upToken = $this->getUpToken();
 
@@ -151,13 +151,13 @@ class Qiniu
      *
      * read: https://github.com/qiniu/php-sdk/tree/develop/docs#11%E4%B8%8A%E4%BC%A0%E6%B5%81%E7%A8%8B
      */
-    public function putFile( $filePath )
+    public function putFile( $filePath, $key = '' )
     {
         if( !file_exists( $filePath ) ) {
             throw new FileNotFoundException($filePath, 404);
         }
 
-        $key = md5_file( $filePath );
+        $key = empty($key) ? md5($filePath) : $key;
 
         $upToken = $this->getUpToken();
 
@@ -188,14 +188,14 @@ class Qiniu
      * 获取上传文件的原始名字,不进行md5转换 by wpp
      * read: https://github.com/qiniu/php-sdk/tree/develop/docs#11%E4%B8%8A%E4%BC%A0%E6%B5%81%E7%A8%8B
      */
-    public function putFileOrigin( $filePath )
+    public function putFileOrigin( $filePath, $key = '' )
     {
         if( !file_exists( $filePath ) ) {
             throw new FileNotFoundException($filePath, 404);
         }
 
 //        $key = md5_file( $filePath );
-        $key = preg_replace('/(.*)\/{1}([^\/]*)/i', '$2', $filePath);
+        $key = empty($key) ? preg_replace('/(.*)\/{1}([^\/]*)/i', '$2', $filePath) : $key;
 
         $upToken = $this->getUpToken();
 
